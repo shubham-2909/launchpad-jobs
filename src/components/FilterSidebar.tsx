@@ -3,7 +3,6 @@ import { jobTypes } from '@/lib/job-types'
 import { Label } from './ui/label'
 import { Input } from './ui/input'
 import { Select } from './ui/select'
-import { Button } from './ui/button'
 import { JobFilterValues, jobFilter } from '@/schema/job'
 import { redirect } from 'next/navigation'
 import FormSubmitButton from './FormSubmitButton'
@@ -41,7 +40,7 @@ export async function FilterSidebar({ defaultValues }: Props) {
 
   return (
     <aside className="sticky top-0 h-fit bg-background p-4 md:w-[250px]">
-      <form action={filterJobs}>
+      <form action={filterJobs} key={JSON.stringify(defaultValues)}>
         <div className="space-y-4">
           <div className="flex flex-col gap-2">
             <Label htmlFor="q">Search</Label>
