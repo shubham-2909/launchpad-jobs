@@ -21,16 +21,26 @@ import { Label } from '@/components/ui/label'
 import { TextEditor } from '@/components/TextEditor'
 import { draftToMarkdown } from 'markdown-draft-js'
 import LoadingButton from '@/components/LoadingButton'
+import { createNewJob } from './actions'
 export function JobForm() {
   const form = useForm<CreateJobValues>({
     resolver: zodResolver(createJob),
   })
-  console.log(form.formState.errors)
   async function handleSubmit(values: CreateJobValues) {
-    console.log(form.watch('location'))
+    const formData = new FormData()
+    Object.entries(values).forEach(([key, value]) => {
+      if (value) {
+        formData.append(key, value)
+      }
+    })
 
-    alert(JSON.stringify(values, null, 2))
+    try {
+      await createNewJob(formData)
+    } catch (error) {
+      alert(error)
+    }
   }
+
   return (
     <main className="m-auto my-10 max-w-3xl space-x-10">
       <div className="space-y-5 text-center">
