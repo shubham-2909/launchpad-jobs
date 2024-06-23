@@ -2,6 +2,7 @@ import prisma from '@/lib/prisma'
 import { JobListItem } from './JobListItem'
 import { JobFilterValues } from '@/schema/job'
 import { Prisma } from '@prisma/client'
+import Link from 'next/link'
 
 type Props = {
   filterValues: JobFilterValues
@@ -43,7 +44,9 @@ export async function JobResults({
   return (
     <div className="grow space-y-4">
       {jobs.map((job) => (
-        <JobListItem key={job.id} job={job} />
+        <Link href={`/jobs/${job.slug}`} className="block" key={job.id}>
+          <JobListItem job={job} />
+        </Link>
       ))}
       {jobs.length === 0 && (
         <p className="m-auto text-center">
