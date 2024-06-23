@@ -15,13 +15,19 @@ import {
 import { Input } from '@/components/ui/input'
 import { Select } from '@/components/ui/select'
 import { jobTypes, locationTypes } from '@/lib/job-types'
+import { LocationInput } from '@/components/LocationInput'
+import { X } from 'lucide-react'
+import { Label } from '@/components/ui/label'
+import { TextEditor } from '@/components/TextEditor'
+import { draftToMarkdown } from 'markdown-draft-js'
+import LoadingButton from '@/components/LoadingButton'
 export function JobForm() {
   const form = useForm<CreateJobValues>({
     resolver: zodResolver(createJob),
   })
-
+  console.log(form.formState.errors)
   async function handleSubmit(values: CreateJobValues) {
-    console.log('form submitted')
+    console.log(form.watch('location'))
 
     alert(JSON.stringify(values, null, 2))
   }
@@ -141,6 +147,122 @@ export function JobForm() {
                 </FormItem>
               )}
             />
+            <FormField
+              control={form.control}
+              name="location"
+              render={({ field }) => {
+                return (
+                  <FormItem>
+                    <FormLabel>Office location</FormLabel>
+                    <FormControl>
+                      <LocationInput
+                        onLocationSelect={field.onChange}
+                        ref={field.ref}
+                      />
+                    </FormControl>
+                    {form.watch('location') && (
+                      <div className="flex items-center gap-1">
+                        <button
+                          type="button"
+                          onClick={() => {
+                            form.setValue('location', '', {
+                              shouldValidate: true,
+                            })
+                          }}
+                        >
+                          <X size={20} />
+                        </button>
+                        <span className="text-sm">
+                          {form.watch('location')}
+                        </span>
+                      </div>
+                    )}
+                    <FormMessage />
+                  </FormItem>
+                )
+              }}
+            />
+            <div className="space-y-2">
+              <Label htmlFor="applicationEmail">How to apply</Label>
+              <div className="flex justify-between">
+                <FormField
+                  control={form.control}
+                  name="applicationEmail"
+                  render={({ field }) => (
+                    <FormItem className="grow">
+                      <FormControl>
+                        <div className="flex items-center">
+                          <Input
+                            id="applicationEmail"
+                            placeholder="Email"
+                            type="email"
+                            {...field}
+                          />
+                          <span className="mx-2">or</span>
+                        </div>
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="applicationUrl"
+                  render={({ field }) => (
+                    <FormItem className="grow">
+                      <FormControl>
+                        <Input
+                          placeholder="Website"
+                          type="url"
+                          {...field}
+                          onChange={(e) => {
+                            field.onChange(e)
+                            form.trigger('applicationEmail')
+                          }}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+            </div>
+            <FormField
+              control={form.control}
+              name="description"
+              render={({ field }) => (
+                <FormItem>
+                  <Label onClick={() => form.setFocus('description')}>
+                    Description
+                  </Label>
+                  <FormControl>
+                    <TextEditor
+                      onChange={(draft) =>
+                        field.onChange(draftToMarkdown(draft))
+                      }
+                      ref={field.ref}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="salary"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Salary</FormLabel>
+                  <FormControl>
+                    <Input {...field} type="number" />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <LoadingButton type="submit" loading={form.formState.isSubmitting}>
+              Submit
+            </LoadingButton>
           </form>
         </Form>
       </div>

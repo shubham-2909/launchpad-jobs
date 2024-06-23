@@ -38,7 +38,10 @@ const locationSchema = z
   })
   .refine(
     (values) =>
-      values.locationType === 'Remote' || !values.location || !values.location
+      !values.locationType ||
+      values.locationType === 'Remote' ||
+      values.location,
+    'Location is required'
   )
 
 export const createJob = z
