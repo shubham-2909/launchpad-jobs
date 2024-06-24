@@ -9,6 +9,7 @@ type Props = {
     location?: string
     type?: string
     remote?: string
+    page?: string
   }
 }
 
@@ -33,7 +34,7 @@ export function generateMetadata({
   }
 }
 export default async function Home({
-  searchParams: { q, remote, location, type },
+  searchParams: { q, remote, location, type, page },
 }: Props) {
   const filterValues: JobFilterValues = {
     q,
@@ -51,7 +52,10 @@ export default async function Home({
       </div>
       <section className="flex flex-col gap-2 md:flex-row">
         <FilterSidebar defaultValues={filterValues} />
-        <JobResults filterValues={filterValues} />
+        <JobResults
+          filterValues={filterValues}
+          page={page ? parseInt(page) : undefined}
+        />
       </section>
     </main>
   )
