@@ -30,7 +30,7 @@ export function generateMetadata({
   searchParams: { q, type, location, remote },
 }: Props): Metadata {
   return {
-    title: `${getTitle({ q, location, type, remote: remote === 'true' })} | Flow jobs`,
+    title: `${getTitle({ q, location, type, remote: remote === 'true' })} | Launchpad jobs`,
   }
 }
 export default async function Home({
