@@ -3,7 +3,7 @@ import { Button } from '@/components/ui/button'
 import prisma from '@/lib/prisma'
 import { Metadata } from 'next'
 import { notFound } from 'next/navigation'
-import React, { cache } from 'react'
+import { cache } from 'react'
 
 type Props = {
   params: {
